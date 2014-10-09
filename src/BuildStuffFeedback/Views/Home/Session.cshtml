@@ -1,0 +1,30 @@
+﻿@using System.Collections.Generic
+@using Nancy.ViewEngines.Razor
+@using BuildStuffFeedback.Models
+@inherits NancyRazorViewBase<Session>
+        <!DOCTYPE HTML>
+
+        <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta charset="utf-8" />
+            <title></title>
+        </head>
+            <body>
+                <tr>
+                    <h1>Add Feedback for @Model.Title</h1>
+                </tr>
+
+                <form action="/sessions/AddFeedback" method="post">
+                    <div align="center">
+                        <br>
+                        <input name="SessionId" type="text" value="@Model.SessionId" hidden="true"/> 
+                        <input name="Rating" type="radio" value="1"> Red </input> <br>
+                        <input name="Rating" type="radio" value="2"> Yellow</input> <br>
+                        <input name="Rating" type="radio" value="3"> Green </input>
+                    </div>
+                    
+                    <textarea rows="4" cols="50" name="Comments" ></textarea>
+                    <input type="submit" ></input>
+                </form>
+            </body>
+    </html>
