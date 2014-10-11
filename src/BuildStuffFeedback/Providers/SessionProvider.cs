@@ -1,59 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.SQLite;
-using System.IO;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using BuildStuffFeedback.Models;
-using PetaPoco;
+using Dapper;
 
 namespace BuildStuffFeedback.Providers
 {
     public class SessionProvider : ISessionProvider
     {
-        private readonly Database _database;
+        private readonly IDbConnection connection;
 
-        public SessionProvider()
-        {
-            _database = GetDatabase();
-        }
-
-        private static Database GetDatabase()
-        {
-            // A sqlite database is just a file.
-            String fileName =  @"..\..\Db\buildstuff.db";
-            
-            String connectionString = "Data Source=" + fileName;
-            DbProviderFactory sqlFactory = new SQLiteFactory();
-            Database db = new Database(connectionString, sqlFactory);
-            return db;
-        }
 
         public IEnumerable<Session> GetAllSessions()
         {
-            String sql = "select * from Sessions";
-            return _database.Query<Session>(sql);
+            using (IDbConnection connection = OpenConnection())
+            {
+                String sql = "select * from Sessions";
 
+                return connection.Query<Session>(sql);
+            }
         }
 
         public Session GetSession(string id)
         {
-            String sql = string.Format("select * from Sessions where sessionId = {0}",id);
-            return _database.Single<Session>(sql);
+            using (IDbConnection connection = OpenConnection())
+            {
+                return connection.Query<Session>("SELECT * FROM Sessions WHERE SessionId = @SessionId",
+                    new {SessionId = id}).SingleOrDefault();
+            }
         }
 
         public void AddFeedback(Feedback feedback)
         {
-            _database.Insert(feedback);
+            var sqlQuery = "INSERT INTO Feedbacks (SessionId, Rating, Comments) " +
+                           "VALUES(@SessionId, @Rating, @Comments);";
+
+            using (IDbConnection connection = OpenConnection())
+            {
+               connection.Query(sqlQuery, feedback);
+            }
+
         }
 
-        public void AddSession(Session session)
+        //public void AddSession(Session session)
+        //{
+        //    _database.Insert(session);
+        //}
+
+        private IDbConnection OpenConnection()
         {
-            _database.Insert(session);
+            return
+                new SqlConnection(ConfigurationManager.ConnectionStrings["BuildStuffConnectionString"].ConnectionString);
         }
+
+      
     }
 
     public interface ISessionProvider
@@ -61,6 +64,5 @@ namespace BuildStuffFeedback.Providers
         IEnumerable<Session> GetAllSessions();
         Session GetSession(string Id);
         void AddFeedback(Feedback feedback);
-
     }
 }

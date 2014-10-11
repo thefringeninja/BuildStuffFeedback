@@ -11,7 +11,7 @@ using Nancy.Responses;
 
 namespace BuildStuffFeedback.Modules
 {
-    public class HomeModule : Nancy.NancyModule
+    public class HomeModule : NancyModule
     {
         public HomeModule()
         {
@@ -27,6 +27,12 @@ namespace BuildStuffFeedback.Modules
             };
 
 
+
+            Get["/ThankYou"] = parameters =>
+            {
+                return View["ThankYou.cshtml"];
+            };
+
             Get["/sessions/{id}"] = parameter =>
             {
                 return View["Session.cshtml", _sessionProvider.GetSession(parameter.id)];
@@ -36,7 +42,7 @@ namespace BuildStuffFeedback.Modules
             {
                 var feedback = this.Bind<Feedback>();
                 _sessionProvider.AddFeedback(feedback);
-                return Response.AsRedirect("/sessions");
+                return Response.AsRedirect("/thankyou");
             };
 
         }
