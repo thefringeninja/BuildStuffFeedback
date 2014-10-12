@@ -14,7 +14,7 @@ namespace BuildStuffFeedback.Modules
     {
         public class AdminRegistrations : IRegistrations
         {
-            private SessionProvider _provider;
+            private readonly SessionProvider _provider;
 
             public AdminRegistrations()
             {
@@ -64,7 +64,7 @@ namespace BuildStuffFeedback.Modules
             : base("/admin")
         {
             Get["/sessions"] = _ => Negotiate.WithModel(new AdminSessionsViewModel(getAllSessions()));
-            Get["/session/{id}"] = p => Negotiate.WithModel(new AdminSessionDetailViewModel(getSessionDetail(p.Id)));
+            Get["/session/{id}"] = p => Negotiate.WithModel(getSessionDetail((string)p.Id));
             Post["/session/{id}/bulk-feedback", runAsync: true] = async (p, token) =>
             {
                 Level rating = Enum.Parse(typeof (Level), Request.Form.rating);

@@ -92,6 +92,7 @@
     </Content>
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Admin\AdminSessionsView.cshtml" />
+    <Content Include="Views\Admin\SessionDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

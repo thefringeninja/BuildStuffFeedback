@@ -46,10 +46,9 @@ namespace BuildStuffFeedback.Providers
         public async Task AddBulkFeedback(int sessionId, Level level, int count)
         {
             var rating = (int)level;
-            const string query = "INSERT INTO Feedbacks (SessionId, Rating) VALUES(@sessionId, @rating);";
+            const string query = "INSERT INTO Feedbacks (SessionId, Rating, Comments) VALUES(@sessionId, @rating, '');";
 
             using (var connection = OpenConnection())
-            using (var transaction = connection.BeginTransaction())
             {
                 for (var i = 0; i < count; i++)
                 {
@@ -59,8 +58,6 @@ namespace BuildStuffFeedback.Providers
                         rating
                     });
                 }
-
-                transaction.Commit();
             }
         }
 
@@ -71,11 +68,10 @@ namespace BuildStuffFeedback.Providers
 
         private IDbConnection OpenConnection()
         {
-            return
-                new SqlConnection(ConfigurationManager.ConnectionStrings["BuildStuffConnectionString"].ConnectionString);
+            var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["BuildStuffConnectionString"].ConnectionString);
+            connection.Open();
+            return connection;
         }
-
-      
     }
 
     public interface ISessionProvider

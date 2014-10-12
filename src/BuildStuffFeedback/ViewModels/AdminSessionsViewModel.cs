@@ -4,13 +4,6 @@ using BuildStuffFeedback.Models.Admin;
 
 namespace BuildStuffFeedback.ViewModels
 {
-    public class AdminSessionDetailViewModel
-    {
-        public AdminSessionDetailViewModel(SessionDetail sessionDetail)
-        {
-            
-        }
-    }
     public class AdminSessionsViewModel : IEnumerable<SessionSummary>
     {
         private readonly IEnumerable<SessionSummary> _sessions;
