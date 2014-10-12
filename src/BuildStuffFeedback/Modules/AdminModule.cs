@@ -7,6 +7,7 @@ using BuildStuffFeedback.Providers;
 using BuildStuffFeedback.ViewModels;
 using Nancy;
 using Nancy.Bootstrapper;
+using Nancy.Responses;
 using Nancy.Security;
 
 namespace BuildStuffFeedback.Modules
@@ -36,7 +37,7 @@ namespace BuildStuffFeedback.Modules
             {
                 get
                 {
-                    yield return new InstanceRegistration(typeof(GetSessions), 
+                    yield return new InstanceRegistration(typeof (GetSessions),
                         new GetSessions(() => _provider.GetAllSessions().Select(session => new SessionSummary
                         {
                             Id = session.Id,
@@ -44,17 +45,25 @@ namespace BuildStuffFeedback.Modules
                             Speaker = session.Speaker,
                             Title = session.Title
                         })));
-                    yield return new InstanceRegistration(typeof(GetSession),
+                    yield return new InstanceRegistration(typeof (GetSession),
                         new GetSession((string id) =>
                         {
                             var session = _provider.GetSession(id);
+                            var feedback = _provider.GetSessionFeedbackSummary(id).ToList();
+                            var ratings = feedback.ToLookup(x => x.Rating, x => new {x.Rating});
                             return new SessionDetail
                             {
                                 Id = session.Id,
                                 SessionId = session.SessionId,
                                 Speaker = session.Speaker,
                                 Title = session.Title,
-                                Email = session.Email
+                                Email = session.Email,
+                                Greens = ratings[(int) Level.Green].Count(),
+                                Yellows = ratings[(int) Level.Yellow].Count(),
+                                Reds = ratings[(int) Level.Red].Count(),
+                                Comments = (from f in feedback
+                                            where false == String.IsNullOrWhiteSpace(f.Comments) 
+                                            select f.Comments).ToList()
                             };
                         }));
                 }

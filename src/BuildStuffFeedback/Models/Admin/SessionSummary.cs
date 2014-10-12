@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BuildStuffFeedback.Models.Admin
 {
@@ -24,6 +25,10 @@ namespace BuildStuffFeedback.Models.Admin
         public String Speaker { get; set; }
 
         public string Email { get; set; }
+        public int Greens { get; set; }
+        public int Yellows { get; set; }
+        public int Reds { get; set; }
+        public IEnumerable<string> Comments { get; set; }
     }
 
     public enum Level

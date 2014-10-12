@@ -8,6 +8,17 @@
 </head>
     <body>
         <fieldset>
+            <legend>Summary</legend>
+            <div>
+                <label>Green</label>
+                @Model.Greens
+                <label>Yellow</label>
+                @Model.Yellows
+                <label>Red</label>
+                @Model.Reds
+            </div>
+        </fieldset>
+        <fieldset>
             <legend>Bulk Feedback</legend>
             <form action="~/admin/session/@Model.SessionId/bulk-feedback" method="POST">
                 <div>
@@ -48,6 +59,16 @@
                 </div>
                 <input type="Submit" value="Submit" />
             </form>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Comments</legend>
+            <ul>
+                @foreach (var comment in Model.Comments)
+                {
+                    <li>@comment</li>
+                }
+            </ul>
         </fieldset>
     </body>
 </html>
