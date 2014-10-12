@@ -32,6 +32,16 @@ namespace BuildStuffFeedback.Providers
             }
         }
 
+        public IEnumerable<Feedback> GetSessionFeedbackSummary(string id)
+        {
+            using (IDbConnection connection = OpenConnection())
+            {
+                return connection.Query<Feedback>("SELECT Rating, Comments FROM Feedbacks WHERE SessionId = @SessionId",
+                    new { SessionId = id });
+            }
+            
+        }
+
         public void AddFeedback(Feedback feedback)
         {
             var sqlQuery = "INSERT INTO Feedbacks (SessionId, Rating, Comments) " +
