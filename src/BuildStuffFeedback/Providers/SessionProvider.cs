@@ -4,16 +4,15 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using BuildStuffFeedback.Models;
+using BuildStuffFeedback.Models.Admin;
 using Dapper;
 
 namespace BuildStuffFeedback.Providers
 {
     public class SessionProvider : ISessionProvider
     {
-        private readonly IDbConnection connection;
-
-
         public IEnumerable<Session> GetAllSessions()
         {
             using (IDbConnection connection = OpenConnection())
@@ -42,7 +41,27 @@ namespace BuildStuffFeedback.Providers
             {
                connection.Query(sqlQuery, feedback);
             }
+        }
 
+        public async Task AddBulkFeedback(int sessionId, Level level, int count)
+        {
+            var rating = (int)level;
+            const string query = "INSERT INTO Feedbacks (SessionId, Rating) VALUES(@sessionId, @rating);";
+
+            using (var connection = OpenConnection())
+            using (var transaction = connection.BeginTransaction())
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    await connection.QueryAsync(query, new
+                    {
+                        sessionId,
+                        rating
+                    });
+                }
+
+                transaction.Commit();
+            }
         }
 
         //public void AddSession(Session session)

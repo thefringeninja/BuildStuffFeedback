@@ -1,0 +1,17 @@
+﻿@inherits NancyRazorViewBase<BuildStuffFeedback.ViewModels.AdminSessionsViewModel>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <ul>
+    @foreach (var item in Model)
+    {
+       <li><a href="~/admin/session/@item.Id">@item.Title</a> by @item.Speaker</li> 
+    }
+    </ul>
+</body>
+</html>
