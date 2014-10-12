@@ -7,6 +7,7 @@ using BuildStuffFeedback.Providers;
 using BuildStuffFeedback.ViewModels;
 using Nancy;
 using Nancy.Bootstrapper;
+using Nancy.Security;
 
 namespace BuildStuffFeedback.Modules
 {
@@ -67,9 +68,8 @@ namespace BuildStuffFeedback.Modules
             Get["/session/{id}"] = p => Negotiate.WithModel(getSessionDetail((string)p.Id));
             Post["/session/{id}/bulk-feedback", runAsync: true] = async (p, token) =>
             {
-                Level rating = Enum.Parse(typeof (Level), Request.Form.rating);
-
                 int sessionId = p.id;
+                Level rating = Enum.Parse(typeof(Level), Request.Form.rating);
                 
                 await provider.AddBulkFeedback(sessionId, rating, Request.Form.count);
 
@@ -78,9 +78,12 @@ namespace BuildStuffFeedback.Modules
 
             Post["/session/{id}/feedback", runAsync: true] = async (p, token) =>
             {
-                Level rating = Enum.Parse(typeof (Level), Request.Form.rating);
                 int sessionId = p.id;
-                string comments = p.Form.comments;
+                Level rating = Enum.Parse(typeof(Level), Request.Form.rating);
+                string comments = Request.Form.comments;
+
+                if (String.IsNullOrWhiteSpace(comments))
+                    throw new InvalidOperationException("Need comments.");
 
                 provider.AddFeedback(new Feedback
                 {

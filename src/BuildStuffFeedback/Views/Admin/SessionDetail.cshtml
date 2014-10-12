@@ -6,24 +6,48 @@
     <meta name="viewport" content="width=device-width" />
     <title></title>
 </head>
-<body>
-    <form action="~/admin/session/@Model.SessionId/bulk-feedback" method="POST">
-        <div>
-            <label>Count</label>
-            <input type="text" name="count" />
-        </div>
-        <div>
-            <label>Rating</label>
-            <div>
-                <label>Green</label>
-                <input type="radio" name="rating" value="Green" />
-                <label>Yellow</label>
-                <input type="radio" name="rating" value="Yellow" />
-                <label>Red</label>
-                <input type="radio" name="rating" value="Red" />
-            </div>
-        </div>
-        <input type="Submit" value="Submit" />
-    </form>
-</body>
+    <body>
+        <fieldset>
+            <legend>Bulk Feedback</legend>
+            <form action="~/admin/session/@Model.SessionId/bulk-feedback" method="POST">
+                <div>
+                    <label>Count</label>
+                    <input type="text" name="count" />
+                </div>
+                <div>
+                    <label>Rating</label>
+                    <div>
+                        <label>Green</label>
+                        <input type="radio" name="rating" value="Green" />
+                        <label>Yellow</label>
+                        <input type="radio" name="rating" value="Yellow" />
+                        <label>Red</label>
+                        <input type="radio" name="rating" value="Red" />
+                    </div>
+                </div>
+                <input type="Submit" value="Submit" />
+            </form>
+        </fieldset>
+        <fieldset>
+            <legend>Feedback with comments</legend>
+            <form action="~/admin/session/@(Model.SessionId)/feedback" method="POST">
+                <div>
+                    <label>Comments</label>
+                    <textarea name="comments"></textarea>
+                </div>
+                <div>
+                    <label>Rating</label>
+                    <div>
+                        <label>Green</label>
+                        <input type="radio" name="rating" value="Green" />
+                        <label>Yellow</label>
+                        <input type="radio" name="rating" value="Yellow" />
+                        <label>Red</label>
+                        <input type="radio" name="rating" value="Red" />
+                    </div>
+                </div>
+                <input type="Submit" value="Submit" />
+            </form>
+        </fieldset>
+    </body>
 </html>
