@@ -73,7 +73,7 @@ namespace BuildStuffFeedback.Modules
                 
                 await provider.AddBulkFeedback(sessionId, rating, Request.Form.count);
 
-                return Response.AsRedirect("/sessions/" + sessionId);
+                return Response.AsRedirect("~/admin/session/" + sessionId);
             };
 
             Post["/session/{id}/feedback", runAsync: true] = async (p, token) =>
@@ -89,7 +89,7 @@ namespace BuildStuffFeedback.Modules
                     SessionId = sessionId
                 });
 
-                return Response.AsRedirect("/sessions/" + sessionId);
+                return Response.AsRedirect("~/admin/session/" + sessionId);
             };
         }
     }
