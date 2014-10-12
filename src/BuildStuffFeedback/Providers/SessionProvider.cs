@@ -39,23 +39,24 @@ namespace BuildStuffFeedback.Providers
 
             using (IDbConnection connection = OpenConnection())
             {
-               connection.Query(sqlQuery, feedback);
+               connection.Execute(sqlQuery, feedback);
             }
         }
 
         public async Task AddBulkFeedback(int sessionId, Level level, int count)
         {
             var rating = (int)level;
-            const string query = "INSERT INTO Feedbacks (SessionId, Rating, Comments) VALUES(@sessionId, @rating, '');";
+            const string query = "INSERT INTO Feedbacks (SessionId, Rating, Comments) VALUES(@sessionId, @rating, @comments);";
 
             using (var connection = OpenConnection())
             {
                 for (var i = 0; i < count; i++)
                 {
-                    await connection.QueryAsync(query, new
+                    await connection.ExecuteAsync(query, new
                     {
                         sessionId,
-                        rating
+                        rating,
+                        comments = ""
                     });
                 }
             }
