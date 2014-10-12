@@ -64,6 +64,8 @@ namespace BuildStuffFeedback.Modules
         public AdminModule(GetSessions getAllSessions, GetSession getSessionDetail, SessionProvider provider)
             : base("/admin")
         {
+            this.RequiresAuthentication();
+
             Get["/sessions"] = _ => Negotiate.WithModel(new AdminSessionsViewModel(getAllSessions()));
             Get["/session/{id}"] = p => Negotiate.WithModel(getSessionDetail((string)p.Id));
             Post["/session/{id}/bulk-feedback", runAsync: true] = async (p, token) =>
