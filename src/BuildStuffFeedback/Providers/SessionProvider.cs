@@ -4,16 +4,15 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using BuildStuffFeedback.Models;
+using BuildStuffFeedback.Models.Admin;
 using Dapper;
 
 namespace BuildStuffFeedback.Providers
 {
     public class SessionProvider : ISessionProvider
     {
-        private readonly IDbConnection connection;
-
-
         public IEnumerable<Session> GetAllSessions()
         {
             using (IDbConnection connection = OpenConnection())
@@ -33,6 +32,16 @@ namespace BuildStuffFeedback.Providers
             }
         }
 
+        public IEnumerable<Feedback> GetSessionFeedbackSummary(string id)
+        {
+            using (IDbConnection connection = OpenConnection())
+            {
+                return connection.Query<Feedback>("SELECT Rating, Comments FROM Feedbacks WHERE SessionId = @SessionId",
+                    new { SessionId = id });
+            }
+            
+        }
+
         public void AddFeedback(Feedback feedback)
         {
             var sqlQuery = "INSERT INTO Feedbacks (SessionId, Rating, Comments) " +
@@ -40,9 +49,27 @@ namespace BuildStuffFeedback.Providers
 
             using (IDbConnection connection = OpenConnection())
             {
-               connection.Query(sqlQuery, feedback);
+               connection.Execute(sqlQuery, feedback);
             }
+        }
 
+        public async Task AddBulkFeedback(int sessionId, Level level, int count)
+        {
+            var rating = (int)level;
+            const string query = "INSERT INTO Feedbacks (SessionId, Rating, Comments) VALUES(@sessionId, @rating, @comments);";
+
+            using (var connection = OpenConnection())
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    await connection.ExecuteAsync(query, new
+                    {
+                        sessionId,
+                        rating,
+                        comments = ""
+                    });
+                }
+            }
         }
 
         //public void AddSession(Session session)
@@ -52,11 +79,10 @@ namespace BuildStuffFeedback.Providers
 
         private IDbConnection OpenConnection()
         {
-            return
-                new SqlConnection(ConfigurationManager.ConnectionStrings["BuildStuffConnectionString"].ConnectionString);
+            var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["BuildStuffConnectionString"].ConnectionString);
+            connection.Open();
+            return connection;
         }
-
-      
     }
 
     public interface ISessionProvider

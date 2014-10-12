@@ -19,6 +19,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +46,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Nancy">
       <HintPath>..\..\packages\Nancy.0.23.2\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Authentication.Basic">
+      <HintPath>..\..\packages\Nancy.Authentication.Basic.0.23.2\lib\net40\Nancy.Authentication.Basic.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.Hosting.Aspnet">
       <HintPath>..\..\packages\Nancy.Hosting.Aspnet.0.23.2\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
@@ -89,6 +94,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Admin\AdminSessionsView.cshtml" />
+    <Content Include="Views\Admin\SessionDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -100,13 +107,19 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Helpers\RadioButtonList.cs" />
+    <Compile Include="Models\Admin\SessionSummary.cs" />
+    <Compile Include="Models\GetSessions.cs" />
     <Compile Include="Models\Feedback.cs" />
     <Compile Include="Models\Session.cs" />
+    <Compile Include="Modules\AdminModule.cs" />
     <Compile Include="Modules\HomeModule.cs" />
+    <Compile Include="Modules\UserValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\SessionProvider.cs" />
     <Compile Include="RazorConfig.cs" />
+    <Compile Include="ViewModels\AdminSessionsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\" />
@@ -143,6 +156,13 @@ xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\BuildProvi
 xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.23.2\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin\"
 )</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

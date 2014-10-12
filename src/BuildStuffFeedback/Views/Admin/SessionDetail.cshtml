@@ -1,0 +1,74 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<BuildStuffFeedback.Models.Admin.SessionDetail>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+    <body>
+        <fieldset>
+            <legend>Summary</legend>
+            <div>
+                <label>Green</label>
+                @Model.Greens
+                <label>Yellow</label>
+                @Model.Yellows
+                <label>Red</label>
+                @Model.Reds
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Bulk Feedback</legend>
+            <form action="~/admin/session/@Model.SessionId/bulk-feedback" method="POST">
+                <div>
+                    <label>Count</label>
+                    <input type="text" name="count" />
+                </div>
+                <div>
+                    <label>Rating</label>
+                    <div>
+                        <label>Green</label>
+                        <input type="radio" name="rating" value="Green" />
+                        <label>Yellow</label>
+                        <input type="radio" name="rating" value="Yellow" />
+                        <label>Red</label>
+                        <input type="radio" name="rating" value="Red" />
+                    </div>
+                </div>
+                <input type="Submit" value="Submit" />
+            </form>
+        </fieldset>
+        <fieldset>
+            <legend>Feedback with comments</legend>
+            <form action="~/admin/session/@(Model.SessionId)/feedback" method="POST">
+                <div>
+                    <label>Comments</label>
+                    <textarea name="comments"></textarea>
+                </div>
+                <div>
+                    <label>Rating</label>
+                    <div>
+                        <label>Green</label>
+                        <input type="radio" name="rating" value="Green" />
+                        <label>Yellow</label>
+                        <input type="radio" name="rating" value="Yellow" />
+                        <label>Red</label>
+                        <input type="radio" name="rating" value="Red" />
+                    </div>
+                </div>
+                <input type="Submit" value="Submit" />
+            </form>
+        </fieldset>
+        
+        <fieldset>
+            <legend>Comments</legend>
+            <ul>
+                @foreach (var comment in Model.Comments)
+                {
+                    <li>@comment</li>
+                }
+            </ul>
+        </fieldset>
+    </body>
+</html>
