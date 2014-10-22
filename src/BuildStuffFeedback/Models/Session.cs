@@ -10,8 +10,6 @@ namespace BuildStuffFeedback.Models
     {
         public int Id { get; set; }
 
-        public string SessionId { get; set; }
-
         public String Title { get; set; }
 
         public String Speaker { get; set; }

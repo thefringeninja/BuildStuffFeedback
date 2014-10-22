@@ -28,8 +28,8 @@ namespace BuildStuffFeedback.Providers
         {
             using (IDbConnection connection = OpenConnection())
             {
-                return connection.Query<Session>("SELECT * FROM Sessions WHERE SessionId = @SessionId",
-                    new {SessionId = id}).SingleOrDefault();
+                return connection.Query<Session>("SELECT * FROM Sessions WHERE Id = @Id",
+                    new {Id = id}).SingleOrDefault();
             }
         }
 
