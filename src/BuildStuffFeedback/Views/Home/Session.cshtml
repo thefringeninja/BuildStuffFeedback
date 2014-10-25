@@ -86,19 +86,26 @@
             <div class="container">
                 <h1>Build Stuff 2014</h1>
                 <p>Software Development conference</p>
-                <p>Add Feedback for @Model.Title</p>
+                @if (@Model.Speaker != @Model.Title)
+                {
+                    <span>@Model.Speaker: @Model.Title</span>
+                }
+                else
+                {
+                    <span> @Model.Title</span>
+                }
                 
                 <form action="/sessions/AddFeedback" method="post" class="feedback-form">
-                    <input name="SessionId" type="text" value="@Model.SessionId" hidden="true" />
+                    <input name="SessionId" type="text" value="@Model.Id" hidden="true" />
                     
                     <label class="red">
-                        <input type="radio" name="Rating" id="radio1" class="radio" value="1" checked />
+                        <input type="radio" name="Rating" id="radio1" class="radio" value="1" />
                     </label>
                     <label class="yellow">
                         <input type="radio" name="Rating" id="radio2" value="2" class="radio" />
                     </label>
                     <label class="green">
-                        <input type="radio" name="Rating" id="radio3" value="3" class="radio" />
+                        <input type="radio" name="Rating" id="radio3" value="3" class="radio" checked />
                     </label>
      
                     <textarea rows="4" cols="50" name="Comments" placeholder="Any Further Comments"></textarea>
