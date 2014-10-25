@@ -86,7 +86,14 @@
             <div class="container">
                 <h1>Build Stuff 2014</h1>
                 <p>Software Development conference</p>
-                <span>@Model.Speaker: @Model.Title</span>
+                @if (@Model.Speaker != @Model.Title)
+                {
+                    <span>@Model.Speaker: @Model.Title</span>
+                }
+                else
+                {
+                    <span> @Model.Title</span>
+                }
                 
                 <form action="/sessions/AddFeedback" method="post" class="feedback-form">
                     <input name="SessionId" type="text" value="@Model.Id" hidden="true" />
