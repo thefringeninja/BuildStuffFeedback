@@ -16,17 +16,15 @@ namespace BuildStuffFeedback.Modules
         public HomeModule()
         {
             var _sessionProvider = new SessionProvider();
+            Get["/"] = parameters =>
+            {
+                return View["Index.cshtml"];
+            };
+
             Get["/sessions"] = parameters =>
             {
-                return View["Index.cshtml", _sessionProvider.GetAllSessions()];
+                return Response.AsRedirect("/");
             };
-
-            Get["/sessions/"] = parameters =>
-            {
-                return View["Index.cshtml", _sessionProvider.GetAllSessions()];
-            };
-
-
 
             Get["/ThankYou"] = parameters =>
             {
@@ -35,7 +33,12 @@ namespace BuildStuffFeedback.Modules
 
             Get["/sessions/{id}"] = parameter =>
             {
-                return View["Session.cshtml", _sessionProvider.GetSession(parameter.id)];
+                var session = _sessionProvider.GetSession(parameter.id);
+                if (session == null)
+                {
+                    return Response.AsRedirect("/");
+                }
+                return View["Session.cshtml",session];
             };
 
             Post["/sessions/AddFeedback"] = parameter =>

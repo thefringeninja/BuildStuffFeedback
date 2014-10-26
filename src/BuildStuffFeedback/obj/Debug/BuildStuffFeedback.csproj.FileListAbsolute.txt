@@ -37,6 +37,7 @@ C:\dev\still\BuildStuffFeedback\src\BuildStuffFeedback\bin\Nancy.xml
 C:\dev\still\BuildStuffFeedback\src\BuildStuffFeedback\bin\Nancy.Hosting.Aspnet.xml
 C:\dev\still\BuildStuffFeedback\src\BuildStuffFeedback\bin\Nancy.ViewEngines.Razor.xml
 C:\dev\still\BuildStuffFeedback\src\BuildStuffFeedback\bin\System.Web.Razor.xml
+C:\Projects\MISC\BuildStuffFeedback\src\BuildStuffFeedback\obj\Debug\BuildStuffFeedback.csprojResolveAssemblyReference.cache
 C:\dev\still\BuildStuffFeedback\src\BuildStuffFeedback\obj\Debug\BuildStuffFeedback.dll
 C:\dev\still\BuildStuffFeedback\src\BuildStuffFeedback\obj\Debug\BuildStuffFeedback.pdb
 C:\dev\still\BuildStuffFeedback\src\BuildStuffFeedback\bin\Nancy.Authentication.Basic.dll
