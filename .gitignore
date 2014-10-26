@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 [Bb]in/
 [Oo]bj/
@@ -125,11 +124,7 @@ src/bower_components/
 *.exe
 *.pak
 .idea/
-=======
-bin
-obj
 out
 packages
 tmp
 !packages/repositories.config
->>>>>>> master
